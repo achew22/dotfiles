@@ -1,0 +1,17 @@
+[user]
+	email = me@andrewzallen.com
+	name = Andrew Z Allen
+[alias]
+	tree = log --graph --decorate --pretty=oneline --abbrev-commit
+[core]
+	excludesfile = ~/.gitignore
+[merge]
+	tool = meld
+[mergetool]
+	prompt = false
+[diff]
+	tool = meld
+	command = difftool --dir-diff
+	patience = true
+[push]
+	default = simple
