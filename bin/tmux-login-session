@@ -1,0 +1,10 @@
+#!/bin/sh
+
+SESSION=${1:-default}
+
+if tmux has-session -t "${SESSION}"; then
+  exec tmux new-session -t "${SESSION}"
+else
+  . ~/.profile
+  exec tmux new-session -s "${SESSION}"
+fi
