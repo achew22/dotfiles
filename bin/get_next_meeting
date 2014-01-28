@@ -1,0 +1,51 @@
+#! /usr/bin/env python
+
+import datetime
+import random
+import sys
+import time
+
+def remove_precision(date):
+  return date.replace(
+    second=0,
+    microsecond=0)
+
+def parse_date(to_parse):
+  '''
+  Date is of the form: Nov 04 16:25 and always
+  on the same day
+  '''
+  date = datetime.datetime.now()
+  hour, minute = to_parse[-5:].strip().split(':')
+  return remove_precision(date.replace(
+    hour=int(hour),
+    minute=int(minute)))
+
+def main(argv):
+  now = remove_precision(datetime.datetime.now())
+  data = open('/tmp/today.calendar').read()
+  lines = data.split('\n')
+  for line in lines:
+    if not line == '':
+      title, date = line.split(' | ')
+      start, end = date.split(' - ')
+      start = parse_date(start)
+      if start > now:
+        diff = start - now
+        diff_str = str(diff)[:-3]
+
+        if diff < datetime.timedelta(minutes=5):
+          fg = "red"
+          bg = "black"
+          if random.randrange(2) == 1:
+            fg, bg = bg, fg
+          diff_str = "#[bg=%(bg)s,fg=%(fg)s,bold]%(diff_str)s" % locals()
+
+        print '%s-%s@%s' % (
+            diff_str,
+            title,
+            start.strftime('%I:%M %p'))
+  print "No more meetings today"
+
+if __name__ == '__main__':
+  main(sys.argv)

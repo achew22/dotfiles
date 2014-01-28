@@ -1,0 +1,3 @@
+#! /usr/bin/env bash
+
+google calendar today --delimiter " | " | tail -n+3 > "/tmp/today.calendar"
