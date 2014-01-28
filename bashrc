@@ -130,7 +130,7 @@ MAGENTA='\e[0;35m'      # Magenta
 CYAN='\e[0;36m'         # Cyan
 WHITE='\e[0;37m'        # White
 
-source ~/personal/dotfiles/git-prompt.sh
+source ~/.dotfiles/git-prompt.sh
 PS1="\[$BLUE\]\u@\h:\[$YELLOW\]\[$YELLOW\]\w\[\033[m\]\[$MAGENTA\]\$(__git_ps1)\[$COLOR_OFF\]\$ "
 
 # Set the default text editor to vi
