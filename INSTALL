@@ -1,0 +1,107 @@
+#! /usr/bin/env bash
+
+##############################
+# To install run this script #
+##############################
+
+# Clone the repository into the home directory
+if [ ! -d ~/.dotfiles ]; then
+  git clone git@github.com:achew22/dotfiles.git ~/.dotfiles
+fi
+
+# Set up colors
+# Debug variables
+DEBUG=true
+
+output() {
+  local title="$1"
+  shift
+  local color="$1"
+  shift
+  local body="$1"
+  normal=$(tput sgr0)
+
+  printf "${color}${title}:${normal} ${body}" "${@}"
+}
+
+info() {
+  local body="$1"
+  shift
+  
+  output "Info" "" "$body" "$@"
+}
+
+log() {
+  if [[ $DEBUG ]]; then
+    local body="$1"
+    shift
+    local blue=$(tput setaf 4)
+
+    output "Log" "$blue" "$body" "$@"
+  fi
+}
+
+debug() {
+  if [[ $DEBUG ]]; then
+    local body="$1"
+    shift
+    local blue=$(tput setaf 4)
+
+    output "Debug" "$blue" "$body" "$@"
+  fi
+}
+
+warn() {
+  local body="$1"
+  shift
+  local blue=$(tput setaf 4)
+  
+  output "Warning" "$blue" "$body" "$@"
+}
+
+error() {
+  local body="$1"
+  shift
+  local blue=$(tput setaf 4)
+  
+  output "Error" "$blue" "$body" "$@"
+}
+
+act() {
+  local cmd=$1
+  shift
+
+  debug "${cmd} %s\n" "$@"
+  
+  if [[ ! $DEBUG ]]; then
+    debug "NOT RUNNING THE COMMAND!"
+    #$1 "$@"
+  fi
+}
+
+# Back up existing dotfiles if they exist
+link() {
+  local src=$1 dest=$2
+  if [[ -e "$dest" || -d "$dest" || -s "$dest" ]]; then
+    info 'Backing up %s as %s\n' "$dest" "$dest.bak"
+    act mv "$dest" "$dest.bak"
+  fi
+
+  info 'Symlinking %s to %s\n' "$src" "$dest"  
+  act ln -s "$src" "$dest"
+}
+
+parse_folder() {
+  action=$1
+  dir=$2
+
+  for file in "$dir"/*; do
+    if [[ -f "$file" ]]; then
+      basename=$(basename $file)
+      $action $file ~/.$basename
+    fi
+  done
+}
+
+link ~/.dotfiles/link/bashrc ~/.bashrc
+#parse_folder link "link"
