@@ -1,8 +1,23 @@
-#! /usr/bin/env bash
+# /usr/bin/env bash
 
 ##############################
 # To install run this script #
 ##############################
+fun() {
+  echo $@
+  local var="$1"
+  echo "$1 = $var" 
+  shift
+
+  echo $@
+  echo $1
+  shift
+
+  printf "%s 1 %s \n" $@ 
+  exit
+}
+
+#fun 'arg1 that is longer' arg2 arg3 arg4 arg5
 
 # Clone the repository into the home directory
 if [ ! -d ~/.dotfiles ]; then
@@ -11,38 +26,41 @@ fi
 
 # Set up colors
 # Debug variables
-DEBUG=true
+DEBUG=false
 
 output() {
   local title="$1"
   shift
   local color="$1"
   shift
-  local body="$1"
   normal=$(tput sgr0)
-
-  printf "${color}${title}:${normal} ${body}" "${@}"
+  local body="$1"
+  shift
+  
+  printf "${color}${title}:${normal} ${body}" "$@"
 }
+#output "title" "color" "body 1:%s 2:%s" "arg1" "arg2" "arg3"
+
 
 info() {
   local body="$1"
   shift
   
-  output "Info" "" "$body" "$@"
+  printf "$body" "$@"
 }
+#info 'Test info (%s)\n' "arg1"
+#info 'My info (%s,%s)\n' "arg1" "arg2" "arg3"
 
 log() {
-  if [[ $DEBUG ]]; then
-    local body="$1"
-    shift
-    local blue=$(tput setaf 4)
+  local body="$1"
+  shift
+  local green=$(tput setaf 4)
 
-    output "Log" "$blue" "$body" "$@"
-  fi
+  output "Log" "$green" $body $@
 }
 
 debug() {
-  if [[ $DEBUG ]]; then
+  if $DEBUG; then
     local body="$1"
     shift
     local blue=$(tput setaf 4)
@@ -50,32 +68,47 @@ debug() {
     output "Debug" "$blue" "$body" "$@"
   fi
 }
+#debug 'test (%s, %s)\n' arg1 arg2
+#exit
 
 warn() {
   local body="$1"
   shift
-  local blue=$(tput setaf 4)
+  local yellow=$(tput setaf 3)
   
-  output "Warning" "$blue" "$body" "$@"
+  output "Warning" "$yellow" "$body" "$@"
 }
 
 error() {
   local body="$1"
   shift
-  local blue=$(tput setaf 4)
+  local red=$(tput setaf 1)
   
-  output "Error" "$blue" "$body" "$@"
+  output "Error" "$red" "$body" "$@"
+}
+
+stage() {
+  local title=$1
+  local columns=40
+
+  declare -i suffix # declare spare an integer
+  local suffix=$columns-${#title}-5
+
+  printf "########################################\n"
+  printf "# %*s%s%*s #\n" "$prefix" "$title" " " "$suffix"
+  printf "########################################\n\n"
 }
 
 act() {
   local cmd=$1
   shift
-
-  debug "${cmd} %s\n" "$@"
   
-  if [[ ! $DEBUG ]]; then
-    debug "NOT RUNNING THE COMMAND!"
-    #$1 "$@"
+  debug "${cmd} ${@}"
+  
+  if ! $DEBUG; then
+    $cmd "$@"
+  else
+    warn "NOT RUNNING THE COMMAND!\n"
   fi
 }
 
@@ -90,6 +123,7 @@ link() {
   info 'Symlinking %s to %s\n' "$src" "$dest"  
   act ln -s "$src" "$dest"
 }
+#link ~/.dotfiles/link/gitignore ~/.gitignore 
 
 parse_folder() {
   action=$1
@@ -103,5 +137,27 @@ parse_folder() {
   done
 }
 
-link ~/.dotfiles/link/bashrc ~/.bashrc
-#parse_folder link "link"
+install_vundle() {
+  if [[ ! -d ~/.vim/bundle/vundle ]]; then
+    info "Cloning vundle\n"
+    mkdir -p ~/.vim/bundle
+
+    # Clone the vundle repo
+    git clone https://github.com/gmarik/vundle.git ~/.vim/bundle/vundle
+  fi
+
+  info "Installing vundle plugins this will take a minute\n"
+
+  # Run vim in silent and install the vundle plugins eating output
+  if ! $DEBUG; then
+    vim -e +BundleInstall +qall > /dev/null 2>&1
+  fi
+  info "Done installing vundle!\n"
+
+}
+
+stage "Creating linked config files"
+parse_folder link "link"
+
+stage "Installing vundle"
+install_vundle
