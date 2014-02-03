@@ -64,4 +64,7 @@ else
 endif
 " }}}
 
+" Load the local vim config
 source ~/.vimrc_local
+
+" vim:foldmethod=marker:foldlevel=0
