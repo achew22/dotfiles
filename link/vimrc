@@ -22,6 +22,14 @@ set syntax=on
 " Turn on line numbers
 set number
 
+" Set reasonable tab settings
+set tabstop=2
+set softtabstop=2
+set shiftwidth=2
+set expandtab
+
+" Hilight the current line
+set cursorline
 
 filetype plugin indent on     " required! (for vundle)
 
