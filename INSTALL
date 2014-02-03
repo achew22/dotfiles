@@ -1,33 +1,22 @@
 # /usr/bin/env bash
-
 ##############################
 # To install run this script #
 ##############################
-fun() {
-  echo $@
-  local var="$1"
-  echo "$1 = $var" 
-  shift
 
-  echo $@
-  echo $1
-  shift
-
-  printf "%s 1 %s \n" $@ 
-  exit
-}
-
-#fun 'arg1 that is longer' arg2 arg3 arg4 arg5
-
-# Clone the repository into the home directory
-if [ ! -d ~/.dotfiles ]; then
-  git clone git@github.com:achew22/dotfiles.git ~/.dotfiles
-fi
+set -e
 
 # Set up colors
 # Debug variables
 DEBUG=false
 
+REPO="${HOME}/.dotfiles"
+
+# Clone the repository into the home directory
+if [ ! -d $REPO ]; then
+  git clone git@github.com:achew22/dotfiles.git $REPO
+fi
+
+# Define helper functions
 output() {
   local title="$1"
   shift
@@ -49,15 +38,15 @@ info() {
   printf "$body" "$@"
 }
 #info 'Test info (%s)\n' "arg1"
-#info 'My info (%s,%s)\n' "arg1" "arg2" "arg3"
 
 log() {
   local body="$1"
   shift
-  local green=$(tput setaf 4)
+  local pink=$(tput setaf 5)
 
-  output "Log" "$green" $body $@
+  output "Log" "$pink" "$body" "$@"
 }
+#log 'log (%s, %s)' arg1 arg2
 
 debug() {
   if $DEBUG; then
@@ -69,7 +58,6 @@ debug() {
   fi
 }
 #debug 'test (%s, %s)\n' arg1 arg2
-#exit
 
 warn() {
   local body="$1"
@@ -78,6 +66,7 @@ warn() {
   
   output "Warning" "$yellow" "$body" "$@"
 }
+#warn 'test (%s, %s)\n' arg1 arg2
 
 error() {
   local body="$1"
@@ -86,6 +75,16 @@ error() {
   
   output "Error" "$red" "$body" "$@"
 }
+#error 'Error (%s, %s)\n' arg1 arg2
+
+success() {
+  local body="$1"
+  shift
+  local green=$(tput setaf 2)
+
+  output "Success" "$green" $body "$@"
+}
+#success 'Success (%s, %s)\n' arg1 arg2
 
 stage() {
   local title=$1
@@ -98,6 +97,7 @@ stage() {
   printf "# %*s%s%*s #\n" "$prefix" "$title" " " "$suffix"
   printf "########################################\n\n"
 }
+#stage "My new stage"
 
 act() {
   local cmd=$1
@@ -114,11 +114,14 @@ act() {
 
 # Back up existing dotfiles if they exist
 link() {
-  local src=$1 dest=$2
-  if [[ -e "$dest" || -d "$dest" || -s "$dest" ]]; then
+  local src="$REPO/$1" dest="$2"
+echo $dest
+
+  # TODO: Figure out what to test on
+  #if [[ -e $dest || -d $dest || -s $dest ]]; then
     info 'Backing up %s as %s\n' "$dest" "$dest.bak"
     act mv "$dest" "$dest.bak"
-  fi
+  #fi
 
   info 'Symlinking %s to %s\n' "$src" "$dest"  
   act ln -s "$src" "$dest"
@@ -130,12 +133,14 @@ parse_folder() {
   dir=$2
 
   for file in "$dir"/*; do
+    # TODO(achew22): Should this only parse files or are folders ok?
     if [[ -f "$file" ]]; then
       basename=$(basename $file)
       $action $file ~/.$basename
     fi
   done
 }
+#parse_folder echo $HOME
 
 install_vundle() {
   if [[ ! -d ~/.vim/bundle/vundle ]]; then
@@ -151,9 +156,11 @@ install_vundle() {
   # Run vim in silent and install the vundle plugins eating output
   if ! $DEBUG; then
     vim -e +BundleInstall +qall > /dev/null 2>&1
+    if [[ $? ]]; then
+      error 'Vundle install failed. Run :BundleInstall in vim to finish\n'
+    fi
   fi
   info "Done installing vundle!\n"
-
 }
 
 stage "Creating linked config files"
@@ -161,3 +168,5 @@ parse_folder link "link"
 
 stage "Installing vundle"
 install_vundle
+
+success "Finished\n"
