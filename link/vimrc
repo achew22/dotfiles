@@ -1,9 +1,9 @@
 " Store as ~/.emacs
+" Andrew Z Allen
 
 set nocompatible
 
-"
-"  Vundle
+" Vundle {{{
 " https://github.com/gmarik/vundle
 set rtp+=~/.vim/bundle/vundle/
 call vundle#rc()
@@ -15,7 +15,7 @@ Bundle 'tomasr/molokai'
 
 " Confiure plugins
 colorscheme molokai
-
+" }}}
 " Turn on syntax hilighting
 set syntax=on
 
