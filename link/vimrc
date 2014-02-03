@@ -14,7 +14,7 @@ Bundle 'gmarik/vundle'
 Bundle 'tomasr/molokai'
 
 " Confiure plugins
-colorscheme molokai
+"colorscheme molokai
 " }}}
 " Vim UI {{{
 " Turn on syntax hilighting
