@@ -16,6 +16,7 @@ Bundle 'tomasr/molokai'
 " Confiure plugins
 colorscheme molokai
 " }}}
+" Vim UI {{{
 " Turn on syntax hilighting
 set syntax=on
 
@@ -31,9 +32,26 @@ set expandtab
 " Hilight the current line
 set cursorline
 
+" Turn on modelines
+set modelines=1
+
+" Only redraw when absolutely necessary
+set lazyredraw
+
+" Show matching characters ([{}])
+set showmatch
+
+" Incremental search
+set incsearch
+
+" Hilight as searching
+" This will keep the hilighting active until disabled
+set hlsearch
+
 filetype plugin indent on     " required! (for vundle)
 
 " Save to system clipboard
 set clipboard=unnamedplus
+" }}}
 
 source ~/.vimrc_local
