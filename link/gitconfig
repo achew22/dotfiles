@@ -15,3 +15,5 @@
 	patience = true
 [push]
 	default = simple
+[color]
+	ui = true
