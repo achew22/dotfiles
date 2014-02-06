@@ -12,14 +12,12 @@ Bundle 'gmarik/vundle'
 
 " Load plugins
 Bundle 'tomasr/molokai'
+Bundle 'vim-ruby/vim-ruby'
 
 " Confiure plugins
 "colorscheme molokai
 " }}}
 " Vim UI {{{
-" Turn on syntax hilighting
-set syntax=on
-
 " Turn on line numbers
 set number
 
@@ -41,17 +39,20 @@ set lazyredraw
 " Show matching characters ([{}])
 set showmatch
 
+" Turn on syntax hilighting
+syntax on
+filetype plugin indent on     " required! (for vundle)
+
+" Save to system clipboard
+set clipboard=unnamedplus
+" }}}
+" Search {{{
 " Incremental search
 set incsearch
 
 " Hilight as searching
 " This will keep the hilighting active until disabled
 set hlsearch
-
-filetype plugin indent on     " required! (for vundle)
-
-" Save to system clipboard
-set clipboard=unnamedplus
 " }}}
 " Tmux {{{
 " When in insert mode in Tmux use a better cursor symbol (narrow insert)
