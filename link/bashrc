@@ -115,6 +115,7 @@ fi
 # Insert local bin directory to path
 export PATH="/opt/node/current/bin:$PATH"
 export PATH="$HOME/.bin:$PATH"
+export PATH="$HOME/.bin_local:$PATH"
 
 # Reset
 COLOR_OFF='\e[0m'       # Text Reset
