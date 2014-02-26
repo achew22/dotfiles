@@ -113,9 +113,10 @@ if [ -f /etc/bash_completion ] && ! shopt -oq posix; then
 fi
 
 # Insert local bin directory to path
-export PATH="/opt/node/current/bin:$PATH"
-export PATH="$HOME/.bin:$PATH"
-export PATH="$HOME/.bin_local:$PATH"
+PATH="/opt/node/current/bin:$PATH"
+PATH="$HOME/.bin:$PATH"
+PATH="$HOME/.bin_local:$PATH"
+export PATH
 
 # Reset
 COLOR_OFF='\e[0m'       # Text Reset
