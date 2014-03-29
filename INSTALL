@@ -166,6 +166,10 @@ install_vundle() {
 stage "Creating linked config files"
 parse_folder link "link"
 
+stage "Creating local versions of config files"
+touch ${HOME}/.vimrc_local
+touch ${HOME}/.bashrc_local
+
 stage "Installing vundle"
 install_vundle
 
