@@ -1,3 +1,3 @@
 #!/bin/bash
 
-sudo aptitude install exuberant-ctags
+aptitude install exuberant-ctags
