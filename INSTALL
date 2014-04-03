@@ -247,18 +247,18 @@ conditionally_exec() {
   if [[ $src == *".linux."* ]]; then
     if [[ $OSTYPE == "linux-gnu" ]]; then
       info "Installing linux specific script: %s\n" $short
-      sudo $src "$@" || \
+      act sudo $src "$@" || \
         error "Failed to run %s\n" $short
     fi
   elif [[ $src == *".osx."* ]]; then
     if [[ $OSTYPE == "darwin"* ]]; then
       info "Installing osx specific script: %s\n" $short
-      sudo $src "$@" || \
+      act sudo $src "$@" || \
         error "Failed to run %s\n" $short
     fi
   else
     info "Installing script: %s\n" $short ||
-    sudo $src "$@" \
+    act sudo $src "$@" \
         error "Failed to run %s\n" $short
   fi
 }
@@ -275,10 +275,9 @@ install_vundle() {
   info "Installing vundle plugins this will take a minute\n"
 
   # Run vim in silent and install the vundle plugins eating output
-  if ! $DEBUG; then
-    vim -e +BundleInstall +qall > /dev/null 2>&1 || \
-      error 'Vundle install failed. Run :BundleInstall in vim to finish\n'
-  fi
+  act vim -e +BundleInstall +qall > /dev/null 2>&1 || \
+    error 'Vundle install failed. Run :BundleInstall in vim to finish\n'
+
   info "Done installing vundle!\n"
 }
 
