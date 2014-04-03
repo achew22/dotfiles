@@ -3,7 +3,9 @@
 # To install run this script #
 ##############################
 
-set -e
+set -o errexit
+# Error traps should be inherited
+set -o errtrace
 
 # Set up colors
 # Debug variables
@@ -15,6 +17,76 @@ REPO="${HOME}/.dotfiles"
 if [ ! -d $REPO ]; then
   git clone git@github.com:achew22/dotfiles.git $REPO
 fi
+
+print_line() {
+  local file=$1
+  shift
+  local line=$1
+  shift
+
+  sed -n -e "${line}p" $file
+}
+
+backtrace() {
+  printf "Backtrace is:\n"
+
+  # caller takes an argument that is the level of the stack to pring
+  frame=0
+  while true; do
+    IFS=" " read -a args <<< $(caller $frame)
+    local line=${args[0]}
+    local fun=${args[1]}
+    local file=${args[2]}
+
+    printf " $file:$line:$fun: %s\n" $(print_line $file $line)
+
+    # Increment frame to step down a level
+    ((frame++))
+
+    if [[ ${PIPESTATUS[0]} -ne 0 ]]; then
+      break
+    fi
+  done
+}
+#backtrace
+
+on_err() {
+  local line=$1
+  shift
+
+  local red=$(tput setaf 1)
+  local normal=$(tput sgr0)
+  local file=$0
+
+  line_text=$(print_line "${file}" $line)
+  printf "\n${red}Exception occurred\n"
+  printf "\tFile: ${file}\n"
+  printf "\tLine: ${line}\n${normal}"
+  printf "\n${line_text}\n\n"
+
+  ERROR=true
+}
+trap 'on_err ${LINENO}' ERR
+#on_err 42
+
+# Trap err signals and get backtrace
+on_exit() {
+  if [[ $ERROR == true ]]; then
+    backtrace
+
+    local red=$(tput setaf 1)
+    local normal=$(tput sgr0)
+    printf "${red}Finished unsuccessfully${normal}\n"
+    exit 1
+  else
+    local green=$(tput setaf 2)
+    local normal=$(tput sgr0)
+    printf "${green}Finished successfully${normal}\n"
+  fi
+}
+trap on_exit EXIT
+#exit 1
+#mv /does/not/exist /tmp
 
 # Define helper functions
 output() {
@@ -122,10 +194,10 @@ link() {
     act mv "$dest" "$dest.bak" || true
   #fi
 
-  info 'Symlinking %s to %s\n' "$src" "$dest"  
+  info 'Symlinking %s to %s\n' "$src" "$dest"
   act ln -s "$src" "$dest"
 }
-#link ~/.dotfiles/link/gitignore ~/.gitignore 
+#link ~/.dotfiles/link/gitignore ~/.gitignore
 
 parse_folder() {
   action=$1
@@ -135,6 +207,7 @@ parse_folder() {
     # TODO(achew22): Should this only parse files or are folders ok?
     if [[ -f "$file" ]]; then
       basename=$(basename $file)
+      log "$action %s ~/.%s\n" $file $basename
       $action $file ~/.$basename
     fi
   done
@@ -144,21 +217,32 @@ parse_folder() {
 # Execute a script as sudo if the script ends in .$OS. or it doesn't
 # specify exclusion
 conditionally_exec() {
-  local src="$1"
+  local short="$1"
+  local src="$REPO/$1"
   shift
+
+  # Before running ANY command, prompt the user for a password.
+  # Invalidate the user's sudo session before doing a command
+  sudo -K # -K = Sure kill (the user's cookie)
 
   # Do not move this into a single check, you're depending on the else
   # fallthrough to execute non ostype matches
   if [[ $src == *".linux."* ]]; then
     if [[ $OSTYPE == "linux-gnu" ]]; then
-      sudo $src "$@"
+      info "Installing linux specific script: %s\n" $short
+      sudo $src "$@" || \
+        error "Failed to run %s\n" $short
     fi
   elif [[ $src == *".osx."* ]]; then
     if [[ $OSTYPE == "darwin"* ]]; then
-      sudo $src "$@"
+      info "Installing osx specific script: %s\n" $short
+      sudo $src "$@" || \
+        error "Failed to run %s\n" $short
     fi
   else
-    sudo $src "$@"
+    info "Installing script: %s\n" $short ||
+    sudo $src "$@" \
+        error "Failed to run %s\n" $short
   fi
 }
 
@@ -175,10 +259,8 @@ install_vundle() {
 
   # Run vim in silent and install the vundle plugins eating output
   if ! $DEBUG; then
-    vim -e +BundleInstall +qall > /dev/null 2>&1
-    if [[ $? ]]; then
+    vim -e +BundleInstall +qall > /dev/null 2>&1 || \
       error 'Vundle install failed. Run :BundleInstall in vim to finish\n'
-    fi
   fi
   info "Done installing vundle!\n"
 }
@@ -195,5 +277,3 @@ install_vundle
 
 stage "Running post install scripts"
 parse_folder conditionally_exec "post_install"
-
-success "Finished\n"
