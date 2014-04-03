@@ -173,6 +173,6 @@ stage "Installing vundle"
 install_vundle
 
 stage "Running post install scripts"
-parse_folder bash "post_install"
+parse_folder sudo "post_install"
 
 success "Finished\n"
