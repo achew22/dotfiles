@@ -9,7 +9,7 @@ set -o errtrace
 
 # Set up colors
 # Debug variables
-DEBUG=false
+DEBUG=${DEBUG:-false}
 
 REPO="${HOME}/.dotfiles"
 
@@ -179,7 +179,7 @@ act() {
   local cmd=$1
   shift
 
-  debug "${cmd} ${@}"
+  debug "${cmd} ${@}\n"
 
   if ! $DEBUG; then
     $cmd "$@"
