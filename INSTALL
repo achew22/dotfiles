@@ -141,6 +141,27 @@ parse_folder() {
 }
 #parse_folder echo $HOME
 
+# Execute a script as sudo if the script ends in .$OS. or it doesn't
+# specify exclusion
+conditionally_exec() {
+  local src="$1"
+  shift
+
+  # Do not move this into a single check, you're depending on the else
+  # fallthrough to execute non ostype matches
+  if [[ $src == *".linux."* ]]; then
+    if [[ $OSTYPE == "linux-gnu" ]]; then
+      sudo $src "$@"
+    fi
+  elif [[ $src == *".osx."* ]]; then
+    if [[ $OSTYPE == "darwin"* ]]; then
+      sudo $src "$@"
+    fi
+  else
+    sudo $src "$@"
+  fi
+}
+
 install_vundle() {
   if [[ ! -d ~/.vim/bundle/vundle ]]; then
     info "Cloning vundle\n"
@@ -173,6 +194,6 @@ stage "Installing vundle"
 install_vundle
 
 stage "Running post install scripts"
-parse_folder sudo "post_install"
+parse_folder conditionally_exec "post_install"
 
 success "Finished\n"
