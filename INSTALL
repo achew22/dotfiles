@@ -119,7 +119,7 @@ link() {
   # TODO: Figure out what to test on
   #if [[ -e $dest || -d $dest || -s $dest ]]; then
     info 'Backing up %s as %s\n' "$dest" "$dest.bak"
-    act mv "$dest" "$dest.bak"
+    act mv "$dest" "$dest.bak" || true
   #fi
 
   info 'Symlinking %s to %s\n' "$src" "$dest"  
