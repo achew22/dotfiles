@@ -97,16 +97,15 @@ output() {
   normal=$(tput sgr0)
   local body="$1"
   shift
-  
+
   printf "${color}${title}:${normal} ${body}" "$@"
 }
 #output "title" "color" "body 1:%s 2:%s" "arg1" "arg2" "arg3"
 
-
 info() {
   local body="$1"
   shift
-  
+
   printf "$body" "$@"
 }
 #info 'Test info (%s)\n' "arg1"
@@ -135,7 +134,7 @@ warn() {
   local body="$1"
   shift
   local yellow=$(tput setaf 3)
-  
+
   output "Warning" "$yellow" "$body" "$@"
 }
 #warn 'test (%s, %s)\n' arg1 arg2
@@ -144,7 +143,7 @@ error() {
   local body="$1"
   shift
   local red=$(tput setaf 1)
-  
+
   output "Error" "$red" "$body" "$@"
 }
 #error 'Error (%s, %s)\n' arg1 arg2
@@ -160,10 +159,15 @@ success() {
 
 stage() {
   local title=$1
+  local first=$2
   local columns=40
 
   declare -i suffix # declare spare an integer
   local suffix=$columns-${#title}-5
+
+  if [[ $first != true ]]; then
+    printf "\n"
+  fi
 
   printf "########################################\n"
   printf "# %*s%s%*s #\n" "$prefix" "$title" " " "$suffix"
@@ -174,9 +178,9 @@ stage() {
 act() {
   local cmd=$1
   shift
-  
+
   debug "${cmd} ${@}"
-  
+
   if ! $DEBUG; then
     $cmd "$@"
   else
@@ -186,7 +190,9 @@ act() {
 
 # Back up existing dotfiles if they exist
 link() {
-  local src="$REPO/$1" dest="$2"
+  local src=$1
+  local basename=$(basename $src)
+  local dest="${HOME}/.${basename}"
 
   # TODO: Figure out what to test on
   #if [[ -e $dest || -d $dest || -s $dest ]]; then
@@ -197,7 +203,19 @@ link() {
   info 'Symlinking %s to %s\n' "$src" "$dest"
   act ln -s "$src" "$dest"
 }
-#link ~/.dotfiles/link/gitignore ~/.gitignore
+#link ~/.dotfiles/link/gitignore
+
+# Touch files that need to be present
+# DO NOT RENAME TO TOUCH OR YOU WILL CONFLICT THE BINARY AND RECURSE
+touch_file() {
+  local src=$1
+  local basename=$(basename $src)
+  local dest="${HOME}/.${basename}"
+
+  info 'Touching %s\n' "$dest"
+  act touch "$dest"
+}
+#touch_file  ~/.dotfiles/link/gitignore
 
 parse_folder() {
   action=$1
@@ -206,8 +224,7 @@ parse_folder() {
   for file in "$dir"/*; do
     # TODO(achew22): Should this only parse files or are folders ok?
     if [[ -f "$file" ]]; then
-      basename=$(basename $file)
-      log "$action %s ~/.%s\n" $file $basename
+      log "$action %s\n" $file
       $action $file ~/.$basename
     fi
   done
@@ -223,7 +240,7 @@ conditionally_exec() {
 
   # Before running ANY command, prompt the user for a password.
   # Invalidate the user's sudo session before doing a command
-  sudo -K # -K = Sure kill (the user's cookie)
+  sudo -K # -K = Sure kill (the user's cookie_
 
   # Do not move this into a single check, you're depending on the else
   # fallthrough to execute non ostype matches
@@ -265,12 +282,11 @@ install_vundle() {
   info "Done installing vundle!\n"
 }
 
-stage "Creating linked config files"
+stage "Creating linked config files" true
 parse_folder link "link"
 
-stage "Creating local versions of config files"
-touch ${HOME}/.vimrc_local
-touch ${HOME}/.bashrc_local
+stage "Touching local config files"
+parse_folder touch_file "touch"
 
 stage "Installing vundle"
 install_vundle
