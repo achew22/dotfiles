@@ -2,6 +2,8 @@
 
 SESSION=${1:-default}
 
+export TERM=xterm-256color
+
 if tmux has-session -t "${SESSION}"; then
   exec tmux new-session -t "${SESSION}"
 else
