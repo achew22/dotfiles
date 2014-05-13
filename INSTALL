@@ -15,7 +15,7 @@ REPO="${HOME}/.dotfiles"
 
 # Clone the repository into the home directory
 if [ ! -d $REPO ]; then
-  git clone git@github.com:achew22/dotfiles.git $REPO
+  git clone https://github.com/achew22/dotfiles.git $REPO
 fi
 
 print_line() {
