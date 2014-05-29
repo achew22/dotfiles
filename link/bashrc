@@ -84,7 +84,6 @@ fi
 # some more ls aliases
 alias ll='ls -alF'
 alias la='ls -A'
-alias l='ls -CF'
 
 # Add an "alert" alias for long running commands.  Use like so:
 #   sleep 10; alert
@@ -133,7 +132,13 @@ CYAN='\e[0;36m'         # Cyan
 WHITE='\e[0;37m'        # White
 
 # Add colors for tmux
-export TERM=screen-256color-bce
+#export TERM=screen-256color-bce
+export TERM=xterm-256color
+
+if [[ "$OSTYPE" == "linux-gnu" ]]; then
+  alias pbcopy='xsel --clipboard --input'
+  alias pbpaste='xsel --clipboard --output'
+fi
 
 source ~/.dotfiles/helpers/git-prompt.sh
 PS1="\[$BLUE\]\u@\h:\[$YELLOW\]\[$YELLOW\]\w\[\033[m\]\[$MAGENTA\]\$(__git_ps1)\[$COLOR_OFF\]\$ "
