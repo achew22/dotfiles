@@ -10,6 +10,9 @@ call vundle#rc()
 let g:vundle_default_git_proto = 'git'
 Bundle 'gmarik/vundle'
 
+" Install some sane defaults
+Bundle 'tpope/vim-sensible'
+
 " Load plugins
 Bundle 'tomasr/molokai'
 Bundle 'vim-ruby/vim-ruby'
@@ -104,6 +107,25 @@ inoremap <up> <nop>
 inoremap <down> <nop>
 inoremap <left> <nop>
 inoremap <right> <nop>
+" }}}
+" Powerline {{{
+Bundle 'Lokaltog/powerline', {'rtp': 'powerline/bindings/vim/'}
+
+"python from powerline.vim import setup as powerline_setup
+"python powerline_setup()
+"python del powerline_setup
+
+set laststatus=2
+" }}}
+" Syntastic {{{
+
+" Syntastic
+Bundle 'scrooloose/syntastic'
+
+let g:syntastic_javascript_checkers = ['gjslint']
+
+nnoremap <leader>l :SyntasticCheck<CR>
+
 " }}}
 
 " Load the local vim config
