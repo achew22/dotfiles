@@ -1,0 +1,62 @@
+#!/usr/bin/env bash
+#DEBUG="TRUE"
+if [[ $DEBUG == "" ]]; then
+    SSH="ssh"
+    SCP="rsync -qavPe ssh"
+else
+    SSH="echo ssh "
+    SCP="echo scp "
+fi
+
+
+pwd
+HOSTS=("achew22.com" "springs.achew22.com")
+
+# Now find a server that is up
+REMOTE_HOST="notup"
+echo "Finding a host"
+for HOST in ${HOSTS[*]}
+do
+    TMP_DIR=`$SSH $HOST mktemp -d`
+    RES=$?
+    if [[ $RES == 0 ]] &>/dev/null
+    then
+        echo "$HOST is up, let's render!"
+        REMOTE_HOST="$HOST"
+        break
+    else
+        echo "$HOST is down, they're all going to laugh at you!"
+    fi
+done
+
+
+if [[ $REMOTE_HOST == "notup" ]]; then
+    exit 1
+fi
+
+# Define some helper functions
+remote() {
+	$SSH $REMOTE_HOST "$@"
+}
+
+remote_copy() {
+	$SCP $@ "$REMOTE_HOST:$TMP_DIR/"
+}
+
+copy_back() {
+	$SCP "$REMOTE_HOST:$TMP_DIR/$@" "./"
+}
+
+# Now copy everything over there
+remote_copy *
+
+# Now build the remote makefile
+remote "(cd ${TMP_DIR}; pwd; make remote)"
+RETURN_VALUE=$?
+
+# Copy back the result
+copy_back '*.pdf'
+copy_back '*.log'
+
+echo "Exited with ${RETURN_VALUE}"
+exit $RETURN_VALUE
