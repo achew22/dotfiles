@@ -1,0 +1,76 @@
+#! /usr/bin/python
+import os, random, array, subprocess
+
+dirs = [
+	'/media/blue/media/tvshows',
+	'/mnt/share/tvshows',
+]
+
+
+for thisDir in dirs:
+	if (os.access(thisDir, os.R_OK)):
+		#We live in a happy world with a large selection of movies and the like
+		#for root, dirs, files in os.walk('/media/blue/media/tvshows'):
+		#	print root#, dirs, files
+
+		shows = os.listdir(thisDir)
+		print "Please pick a show:"
+		for index, showName in enumerate(shows):
+			print "[",index + 1,"] ",showName
+
+		try:
+			showIndex = int(raw_input("Please enter the shows index [1]: ")) - 1
+		except KeyboardInterrupt:
+			print ""
+			exit()
+		except:
+			showIndex = 0
+
+		show = shows[ showIndex ]
+		print "Playing a random episode of",show
+		try:
+			episodeCount = int(raw_input("How many episodes would you like to watch [1]:"))
+		except KeyboardInterrupt:
+			print ""
+			exit()
+		except:
+			episodeCount = 1
+	
+		fileList = []
+		for root, subFolders, files in os.walk(thisDir + '/' + show):
+			for file in files:
+				fileList.append(os.path.join(root,file))
+
+		inOrder = -1
+		try:
+			inOrder = file(thisDir + '/.movie').read()
+		except:
+			pass
+
+		try:
+			if inOrder != -1:
+				input = raw_input("Episode order matters for " + show + " y/n [n]:")
+				inOrder = (input == 'y' or input == 'yes')
+		except KeyboardInterrupt:
+			print ""
+			exit()
+		except:
+			inOrder = false
+
+		toPlay = []
+		if inOrder:
+			#Play em in order so take a subset of length episodeCount
+			sliceIndex = random.randrange(len(fileList) - episodeCount)
+			toPlay = fileList[sliceIndex : sliceIndex + episodeCount]
+		else:
+			#Order doesn't matter so pull a random item from the array
+			random.shuffle(fileList)
+			for i in range(episodeCount):
+				element = fileList[i]
+				fileList.remove(element)
+				toPlay.append(element)
+		#print "\n\n\n\n\n"
+		subprocess.call(['mplayer','-fs','-zoom'] + toPlay)
+		exit()
+	else:
+		print "Youre not hooked up play in " + thisDir
