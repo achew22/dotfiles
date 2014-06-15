@@ -281,11 +281,30 @@ install_vundle() {
   info "Done installing vundle!\n"
 }
 
+install_youcompleteme() {
+  if [[ ! -d ~/.vim/bundle/YouCompleteMe ]]; then
+    info "Cloning YouCompleteMe\n"
+    mkdir -p ~/.vim/bundle/YoucompleteMe
+
+    # Clone the YCM repo
+    git clone https://github.com/Valloric/YouCompleteMe.git ~/.vim/bundle/YouCompleteMe
+    pushd ~/.vim/bundle/YouCompleteMe
+    git submodule update --init --recursive
+
+    info "Installing YouCompleteMe\n"
+    ./install.sh
+    popd
+  fi
+}
+
 stage "Creating linked config files" true
 parse_folder link "${REPO}/link"
 
 stage "Touching local config files"
 parse_folder touch_file "${REPO}/touch"
+
+stage "Install YouCompleteMe"
+install_youcompleteme
 
 stage "Installing vundle"
 install_vundle

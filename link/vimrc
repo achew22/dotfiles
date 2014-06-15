@@ -146,6 +146,9 @@ autocmd BufEnter * silent! lcd %:p:h
 " Spell check {{{
 set spell spelllang=en_us
 " }}}
+" YouCompleteMe {{{
+Bundle 'Valloric/YouCompleteMe'
+" }}}
 
 " Load the local vim config
 source ~/.vimrc_local
