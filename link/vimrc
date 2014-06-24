@@ -135,6 +135,10 @@ let g:syntastic_javascript_checkers = ['gjslint']
 nnoremap <leader>l :SyntasticCheck<CR>
 
 " }}}
+" Navigation options {{{
+" Change to the current dir on open
+autocmd BufEnter * silent! lcd %:p:h
+" }}}
 
 " Load the local vim config
 source ~/.vimrc_local
