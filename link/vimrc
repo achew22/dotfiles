@@ -10,6 +10,9 @@ call vundle#begin()
 let g:vundle_default_git_proto = 'git'
 Plugin 'gmarik/vundle'
 
+" Git plugin
+Plugin 'tpope/vim-fugitive'
+
 " Install some sane defaults
 Plugin 'tpope/vim-sensible'
 
