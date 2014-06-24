@@ -6,20 +6,21 @@ set nocompatible
 " Vundle {{{
 " https://github.com/gmarik/vundle
 set rtp+=~/.vim/bundle/vundle/
-call vundle#rc()
+call vundle#begin()
 let g:vundle_default_git_proto = 'git'
-Bundle 'gmarik/vundle'
+Plugin 'gmarik/vundle'
 
 " Install some sane defaults
-Bundle 'tpope/vim-sensible'
+Plugin 'tpope/vim-sensible'
 
 " Load plugins
-Bundle 'tomasr/molokai'
-Bundle 'vim-ruby/vim-ruby'
+Plugin 'tomasr/molokai'
+Plugin 'vim-ruby/vim-ruby'
 
 " CtrlP
-Bundle 'kien/ctrlp.vim'
+Plugin 'kien/ctrlp.vim'
 
+call vundle#end()
 " Confiure plugins
 "colorscheme molokai
 " }}}
