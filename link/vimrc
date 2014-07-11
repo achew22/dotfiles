@@ -24,7 +24,7 @@ Plugin 'vim-ruby/vim-ruby'
 Plugin 'kien/ctrlp.vim'
 
 call vundle#end()
-" Confiure plugins
+" Configure  plugins
 "colorscheme molokai
 " }}}
 " tmux navigator {{{
@@ -45,7 +45,7 @@ set softtabstop=2
 set shiftwidth=2
 set expandtab
 
-" Hilight the current line
+" Highlight the current line
 set cursorline
 
 " Turn on modelines
@@ -57,9 +57,9 @@ set lazyredraw
 " Show matching characters ([{}])
 set showmatch
 
-" Turn on syntax hilighting
+" Turn on syntax highlighting
 syntax on
-filetype plugin indent on     " required! (for vundle)
+filetype plugin indent on     " required! (for Vundle)
 
 " Save to system clipboard
 set clipboard=unnamedplus
@@ -68,8 +68,8 @@ set clipboard=unnamedplus
 " Incremental search
 set incsearch
 
-" Hilight as searching
-" This will keep the hilighting active until disabled
+" Highlight as searching
+" This will keep the highlighting active until disabled
 set hlsearch
 
 " CtrlP search settings
@@ -142,6 +142,9 @@ nnoremap <leader>l :SyntasticCheck<CR>
 " Navigation options {{{
 " Change to the current dir on open
 autocmd BufEnter * silent! lcd %:p:h
+" }}}
+" Spell check {{{
+set spell spelllang=en_us
 " }}}
 
 " Load the local vim config
