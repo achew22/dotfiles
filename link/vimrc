@@ -61,6 +61,10 @@ set showmatch
 syntax on
 filetype plugin indent on     " required! (for Vundle)
 
+" When navigating over word wrapped lines, navigate by column instead of row
+nnoremap j gj
+nnoremap k gk
+
 " Save to system clipboard
 set clipboard=unnamedplus
 " }}}
