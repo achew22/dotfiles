@@ -48,6 +48,9 @@ set expandtab
 " Highlight the current line
 set cursorline
 
+" Ignore case (in search) when pattern is lowercase
+set smartcase
+
 " Turn on modelines
 set modelines=1
 
