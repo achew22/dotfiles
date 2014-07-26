@@ -24,8 +24,8 @@ Plugin 'vim-ruby/vim-ruby'
 Plugin 'kien/ctrlp.vim'
 
 call vundle#end()
-" Configure  plugins
-"colorscheme molokai
+" Confiure plugins
+colorscheme molokai
 " }}}
 " tmux navigator {{{
 Bundle 'christoomey/vim-tmux-navigator'
