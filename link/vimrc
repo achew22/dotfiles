@@ -65,6 +65,9 @@ filetype plugin indent on     " required! (for Vundle)
 nnoremap j gj
 nnoremap k gk
 
+" Remap ; so :
+nnoremap ; :
+
 " Save to system clipboard
 set clipboard=unnamedplus
 " }}}
