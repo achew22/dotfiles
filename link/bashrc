@@ -99,8 +99,6 @@ if [ -f ~/.bash_aliases ]; then
 fi
 
 # Make open work
-alias open='gnome-open'
-alias url='sensible-browser'
 alias takeover="tmux detach -a"
 alias sl='la'
 
@@ -135,10 +133,19 @@ WHITE='\e[0;37m'        # White
 #export TERM=screen-256color-bce
 export TERM=xterm-256color
 
-if [[ "$OSTYPE" == "linux-gnu" ]]; then
-  alias pbcopy='xsel --clipboard --input'
-  alias pbpaste='xsel --clipboard --output'
-fi
+case "${OSTYPE}" in
+  linux-gnu) # Linux
+    # Provide helpers that are useful from OSX in linux
+    alias open='gnome-open'
+    alias url='sensible-browser'
+
+    alias pbcopy='xsel --clipboard --input'
+    alias pbpaste='xsel --clipboard --output'
+    ;;
+  darwin*) # OSX
+    alias url='open -a Google\ Chrome'
+    ;;
+esac
 
 source ~/.dotfiles/helpers/git-prompt.sh
 PS1="\[$BLUE\]\u@\h:\[$YELLOW\]\[$YELLOW\]\w\[\033[m\]\[$MAGENTA\]\$(__git_ps1)\[$COLOR_OFF\]\$ "
