@@ -3,6 +3,10 @@
 
 set nocompatible
 
+" Vim Helpers {{{
+nnoremap <leader>ve :edit ~/.vimrc<cr>
+nnoremap <leader>vs :source ~/.vimrc<cr>
+" }}}
 " Vundle {{{
 " https://github.com/gmarik/vundle
 set rtp+=~/.vim/bundle/vundle/
