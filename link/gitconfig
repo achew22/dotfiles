@@ -10,6 +10,7 @@
 [mergetool]
 	prompt = false
 [diff]
+	renames = true
 	tool = meld
 	command = difftool --dir-diff
 	patience = true
