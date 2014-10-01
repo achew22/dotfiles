@@ -23,6 +23,7 @@ Plugin 'tpope/vim-sensible'
 " Load plugins
 Plugin 'tomasr/molokai'
 Plugin 'vim-ruby/vim-ruby'
+Plugin 'derekwyatt/vim-scala'
 
 " CtrlP
 Plugin 'kien/ctrlp.vim'
