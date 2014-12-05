@@ -20,6 +20,7 @@ Plugin 'gmarik/vundle'
 
 " Git plugin
 Plugin 'tpope/vim-fugitive'
+nnoremap <leader>gw :Gwrite<cr>
 
 " Install some sane defaults
 Plugin 'tpope/vim-sensible'
