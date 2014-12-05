@@ -4,6 +4,10 @@
 set nocompatible
 
 " Vim Helpers {{{
+
+" Map , to \ to allow multiple leaders
+nmap , \
+
 nnoremap <leader>ve :edit ~/.vimrc<cr>
 nnoremap <leader>vs :source ~/.vimrc<cr>
 " }}}
