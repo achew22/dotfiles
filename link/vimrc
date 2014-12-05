@@ -33,6 +33,9 @@ Plugin 'tomasr/molokai'
 Plugin 'vim-ruby/vim-ruby'
 Plugin 'derekwyatt/vim-scala'
 
+" Install a plugin that lets you load a file:linenumber:column combo
+Bundle 'bogado/file-line'
+
 " CtrlP
 Plugin 'kien/ctrlp.vim'
 
