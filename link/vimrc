@@ -25,6 +25,9 @@ nnoremap <leader>gw :Gwrite<cr>
 " Install some sane defaults
 Plugin 'tpope/vim-sensible'
 
+" Smart handling of paste (Auto set paste, powered by 'bracketed paste')
+Plugin 'ConradIrwin/vim-bracketed-paste'
+
 " Load plugins
 Plugin 'tomasr/molokai'
 Plugin 'vim-ruby/vim-ruby'
