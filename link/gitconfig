@@ -10,12 +10,13 @@
 [core]
 	excludesfile = ~/.gitignore
 [merge]
-	tool = meld
+	tool = diffconflicts
 [mergetool]
 	prompt = false
+	keepBackup = false
 [diff]
 	renames = true
-	tool = meld
+	tool = vimdiff
 	command = difftool --dir-diff
 	patience = true
 [push]
@@ -24,3 +25,8 @@
 	ui = true
 [include]
   path = ~/.gitignore_local
+[multi]
+	lgtm-msg-read = yes
+[mergetool "diffconflicts"]
+	cmd = diffconflicts vim $BASE $LOCAL $REMOTE $MERGED
+	trustExitCode = true
