@@ -30,3 +30,5 @@
 [mergetool "diffconflicts"]
 	cmd = diffconflicts vim $BASE $LOCAL $REMOTE $MERGED
 	trustExitCode = true
+[http]
+	cookiefile = /home/achew22/.gitcookies
