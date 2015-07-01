@@ -13,7 +13,7 @@ nnoremap <leader>vs :source ~/.vimrc<cr>
 " }}}
 " Vundle {{{
 " https://github.com/gmarik/vundle
-set rtp+=~/.vim/bundle/vundle/
+set rtp+=~/.vim/bundle/Vundle.vim/
 call vundle#begin()
 let g:vundle_default_git_proto = 'git'
 Plugin 'gmarik/vundle'
