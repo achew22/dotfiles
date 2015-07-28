@@ -138,6 +138,11 @@ endif
 set nobackup
 set noswapfile
 " }}}
+" Whitespace character rendering {{{
+" use » to mark Tabs and ° to mark trailing whitespace. This is a
+" non-obtrusive way to mark these special characters.
+set list listchars=tab:»\ ,trail:°
+" }}}
 " Vim Hard Mode {{{
 nnoremap <up> <nop>
 nnoremap <down> <nop>
