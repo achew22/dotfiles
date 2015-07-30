@@ -154,6 +154,7 @@ PS1="\[$BLUE\]\u@\h:\[$YELLOW\]\[$YELLOW\]\w\[\033[m\]\[$MAGENTA\]\$(__git_ps1)\
 export EDITOR='vim'
 # Use bash in vi mode
 set -o vi
+set +errexit # Do not explode when there is a non-zero exit code
 
 if [ -f ~/.bashrc_local ]; then
   . ~/.bashrc_local

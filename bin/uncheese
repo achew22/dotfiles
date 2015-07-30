@@ -1,0 +1,11 @@
+#! /usr/bin/env bash
+
+# Set some constants
+DATE=`date +%Y-%m-%d`
+USER_TO_UNCHEESE=${1-achew22}
+
+echo "Uncheesing ${USER_TO_UNCHEESE}'s computer on ${DATE}"
+
+HOMEDIR=`eval echo "~${USER_TO_UNCHEESE:$1}"`
+echo $HOMEDIR
+
