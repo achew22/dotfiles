@@ -238,9 +238,15 @@ conditionally_exec() {
   local src="$REPO/$1"
   shift
 
+  # Install sudo if it isn't installed
+  command -v sudo > /dev/null 2>&1 || {
+    echo "Prompting to install sudo, if you say no your install will abort"
+    apt-get install sudo || (echo "Install aborted because sudo is absent"; exit 1)
+  }
+
   # Before running ANY command, prompt the user for a password.
   # Invalidate the user's sudo session before doing a command
-  sudo -K || echo "Sudo not available" # -K = Sure kill (the user's cookie_
+  sudo -K # -K = Sure kill (the user's cookie)
 
   # Do not move this into a single check, you're depending on the else
   # fallthrough to execute non ostype matches
