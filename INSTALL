@@ -297,6 +297,13 @@ install_youcompleteme() {
   fi
 }
 
+install_vim_color_scheme() {
+  mkdir -p ~/.vim/colors
+  pushd ~/.vim/colors
+  wget https://raw.githubusercontent.com/tomasr/molokai/master/colors/molokai.vim
+  popd
+}
+
 stage "Creating linked config files" true
 parse_folder link "${REPO}/link"
 
@@ -308,6 +315,9 @@ install_youcompleteme
 
 stage "Installing vundle"
 install_vundle
+
+stage "Installing vim color scheme"
+install_vim_color_scheme
 
 stage "Running post install scripts"
 parse_folder conditionally_exec "post_install"
