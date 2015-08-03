@@ -303,6 +303,9 @@ parse_folder link "${REPO}/link"
 stage "Touching local config files"
 parse_folder touch_file "${REPO}/touch"
 
+stage "Installing vim color scheme"
+install_vim_color_scheme
+
 stage "Install YouCompleteMe"
 install_youcompleteme
 
