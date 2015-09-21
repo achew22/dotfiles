@@ -23,9 +23,9 @@ else
     ERR=$TRACE
 fi
 
-if [ $RESULT -ne 0 -o -s "$ERR" ]
+if [ $RESULT -ne 0 ]
     then
-    echo "Cronic detected failure or error output for the command:"
+    echo "Cronic detected failure:"
     echo "$@"
     echo
     echo "RESULT CODE: $RESULT"
