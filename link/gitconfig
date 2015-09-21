@@ -24,7 +24,7 @@
 [color]
 	ui = true
 [include]
-  path = ~/.gitignore_local
+	path = ~/.gitignore_local
 [multi]
 	lgtm-msg-read = yes
 [mergetool "diffconflicts"]
