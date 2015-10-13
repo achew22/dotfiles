@@ -7,6 +7,7 @@
 	ll = log --stat
 	lg = log
 	lp = log -p
+	amend = commit --amend --no-edit
 [core]
 	excludesfile = ~/.gitignore
 [merge]
