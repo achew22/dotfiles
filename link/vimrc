@@ -31,6 +31,7 @@ Plugin 'ConradIrwin/vim-bracketed-paste'
 " Load plugins
 Plugin 'tomasr/molokai'
 Plugin 'vim-ruby/vim-ruby'
+Plugin 'fatih/vim-go'
 Plugin 'derekwyatt/vim-scala'
 
 " Install a plugin that lets you load a file:linenumber:column combo
