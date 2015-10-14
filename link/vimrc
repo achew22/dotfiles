@@ -16,7 +16,7 @@ nnoremap <leader>vs :source ~/.vimrc<cr>
 set rtp+=~/.vim/bundle/Vundle.vim/
 call vundle#begin()
 let g:vundle_default_git_proto = 'git'
-Plugin 'gmarik/vundle'
+Plugin 'VundleVim/Vundle.vim'
 
 " Git plugin
 Plugin 'tpope/vim-fugitive'

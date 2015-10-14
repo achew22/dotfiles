@@ -197,11 +197,11 @@ link() {
   # TODO: Figure out what to test on
   #if [[ -e $dest || -d $dest || -s $dest ]]; then
     info 'Backing up %s as %s\n' "$dest" "$dest.bak"
-    act mv "$dest" "$dest.bak" || true
+    act mv '$dest' '$dest.bak' || true
   #fi
 
   info 'Symlinking %s to %s\n' "$src" "$dest"
-  act ln -s "$src" "$dest"
+  act ln -s '$src' '$dest'
 }
 #link ~/.dotfiles/link/gitignore
 
@@ -213,7 +213,7 @@ touch_file() {
   local dest="${HOME}/.${basename}"
 
   info 'Touching %s\n' "$dest"
-  act touch "$dest"
+  act touch '$dest'
 }
 #touch_file  ~/.dotfiles/link/gitignore
 
@@ -253,18 +253,18 @@ conditionally_exec() {
   if [[ $src == *".linux."* ]]; then
     if [[ $OSTYPE == "linux-gnu" ]]; then
       info "Installing linux specific script: %s\n" $short
-      act sudo $src "$@" || \
+      act $src "$@" || \
         error "Failed to run %s\n" $short
     fi
   elif [[ $src == *".osx."* ]]; then
     if [[ $OSTYPE == "darwin"* ]]; then
       info "Installing osx specific script: %s\n" $short
-      act sudo $src "$@" || \
+      act $src "$@" || \
         error "Failed to run %s\n" $short
     fi
   else
     info "Installing script: %s\n" $short ||
-    act sudo $src "$@" \
+    act $src "$@" \
         error "Failed to run %s\n" $short
   fi
 }
@@ -275,13 +275,13 @@ install_vundle() {
     mkdir -p ~/.vim/bundle
 
     # Clone the vundle repo
-    git clone https://github.com/gmarik/vundle.git ~/.vim/bundle/vundle
+    git clone https://github.com/VundleVim/Vundle.vim ~/.vim/bundle/Vundle.vim
   fi
 
   info "Installing vundle plugins this will take a minute\n"
 
   # Run vim in silent and install the vundle plugins eating output
-  act vim -e +BundleInstall +qall > /dev/null 2>&1 || \
+  act 'vim -e +BundleInstall +qall' || \
     error 'Vundle install failed. Run :BundleInstall in vim to finish\n'
 
   info "Done installing vundle!\n"
