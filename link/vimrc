@@ -35,7 +35,7 @@ Plugin 'fatih/vim-go'
 Plugin 'derekwyatt/vim-scala'
 
 " Install a plugin that lets you load a file:linenumber:column combo
-Bundle 'bogado/file-line'
+Plugin 'bogado/file-line'
 
 " CtrlP
 Plugin 'kien/ctrlp.vim'
@@ -45,7 +45,7 @@ call vundle#end()
 colorscheme molokai
 " }}}
 " tmux navigator {{{
-Bundle 'christoomey/vim-tmux-navigator'
+Plugin 'christoomey/vim-tmux-navigator'
 
 nnoremap <C-J> <C-W><C-J>
 nnoremap <C-K> <C-W><C-K>
@@ -155,7 +155,7 @@ inoremap <left> <nop>
 inoremap <right> <nop>
 " }}}
 " Powerline {{{
-Bundle 'Lokaltog/powerline', {'rtp': 'powerline/bindings/vim/'}
+Plugin 'Lokaltog/powerline', {'rtp': 'powerline/bindings/vim/'}
 
 "python from powerline.vim import setup as powerline_setup
 "python powerline_setup()
@@ -166,7 +166,7 @@ set laststatus=2
 " Syntastic {{{
 
 " Syntastic
-Bundle 'scrooloose/syntastic'
+Plugin 'scrooloose/syntastic'
 
 let g:syntastic_check_on_open=1
 let g:syntastic_javascript_checkers = ['gjslint']
@@ -183,7 +183,7 @@ autocmd BufEnter * silent! lcd %:p:h
 set spell spelllang=en_us
 " }}}
 " YouCompleteMe {{{
-Bundle 'Valloric/YouCompleteMe'
+Plugin 'Valloric/YouCompleteMe'
 " }}}
 " Paste without pain {{{
 " Pasting by default overwrites the buffer. This remaps it to not
