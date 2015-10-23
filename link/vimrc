@@ -34,6 +34,9 @@ Plugin 'vim-ruby/vim-ruby'
 Plugin 'fatih/vim-go'
 Plugin 'derekwyatt/vim-scala'
 
+" Detect unicode characters that look an awful lot like normal ascii characters
+Plugin 'vim-utils/vim-troll-stopper'
+
 " Install a plugin that lets you load a file:linenumber:column combo
 Plugin 'bogado/file-line'
 
