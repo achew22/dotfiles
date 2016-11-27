@@ -49,6 +49,7 @@ Plugin 'kien/ctrlp.vim'
 " }}}
 " Typescript stuff {{{
 Plugin 'leafgarland/typescript-vim'
+autocmd BufNewFile,BufRead *.ts,*.tsx setlocal filetype=typescript
 " }}}
 " tmux navigator {{{
 Plugin 'christoomey/vim-tmux-navigator'
