@@ -8,6 +8,8 @@
 	lg = log
 	lp = log -p
 	amend = commit --amend --no-edit
+	sync = pull --rebase origin master
+	review = push origin HEAD:refs/for/master
 [core]
 	excludesfile = ~/.gitignore
 [merge]
