@@ -18,6 +18,17 @@ call vundle#begin()
 let g:vundle_default_git_proto = 'git'
 Plugin 'VundleVim/Vundle.vim'
 " }}}
+" Google VIM {{{
+" Maktaba is the Google plugin manager
+Plugin 'google/vim-maktaba'
+
+" Install the codeformatter.
+Plugin 'google/vim-codefmt'
+
+" Also add Glaive, which is used to configure codefmt's maktaba flags. See
+" `:help :Glaive` for usage.
+Plugin 'google/vim-glaive'
+" }}}
 " Vim Fugitive {{{
 
 " Git plugin
@@ -204,5 +215,9 @@ source ~/.vimrc_local
 " Now tell vundle that everything is loaded.
 call vundle#end()
 
+" the glaive#Install() should go after the "call vundle#end()"
+call glaive#Install()
+" Optional: Enable codefmt's default mappings on the <Leader>= prefix.
+Glaive codefmt plugin[mappings]
 
 " vim:foldmethod=marker:foldlevel=0
