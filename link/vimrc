@@ -204,6 +204,10 @@ set spell spelllang=en_us
 " YouCompleteMe {{{
 Plugin 'Valloric/YouCompleteMe'
 " }}}
+" Markdown Settings {{{
+" Automatically break markdown files on the 80th character.
+autocmd FileType markdown setlocal tw=79
+" }}}
 " Paste without pain (doesn't overwrite the default buffer) {{{
 " Pasting by default overwrites the buffer. This remaps it to not
 xnoremap p pgvy
