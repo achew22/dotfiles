@@ -102,6 +102,7 @@ fi
 alias takeover="tmux detach -a"
 alias sl='la'
 alias scpresume='rsync -Pazhv -e ssh'
+alias lg='lb'
 
 # enable programmable completion features (you don't need to enable
 # this, if it's already enabled in /etc/bash.bashrc and /etc/profile
