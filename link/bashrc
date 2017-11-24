@@ -101,6 +101,7 @@ fi
 # Make open work
 alias takeover="tmux detach -a"
 alias sl='la'
+alias scpresume='rsync -Pazhv -e ssh'
 
 # enable programmable completion features (you don't need to enable
 # this, if it's already enabled in /etc/bash.bashrc and /etc/profile
