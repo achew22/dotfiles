@@ -1,0 +1,48 @@
+#!/bin/sh
+set -e
+
+FILE_PATH="$1" # path to the file in the repository
+OLD="$2" # path to temporary checkout of file from master
+OLD_HASH="$3" # hash for file in master
+OLD_MODE="$4" # mode (privileges) for file in master
+NEW="$5" # path to temporary checkout of file from feature
+NEW_HASH="$6" # hash for file in feature
+NEW_MODE="$7" # mode (privileges) for file in feature
+
+OUT="$(mktemp /tmp/imagediff.XXXXXX)"
+
+set -x
+
+# Fuzzed image comparison.
+# From http://www.akikoskinen.info/image-diffs-with-git/
+diff_with_fuzz() {
+  OUT="$OUT.png"
+  GIT_IMAGE_DIFF_FUZZ=4000
+  compare -fuzz $GIT_IMAGE_DIFF_FUZZ $NEW $OLD png:- \
+    | montage -geometry +4+4 $OLD png:– $NEW png:- > $OUT
+}
+
+# Left right comparison.
+left_right() {
+  OUT="$OUT.png"
+  compare $OLD $NEW png:- \
+    | montage -geometry +4+4 $OLD - $NEW png:- > $OUT
+}
+vertical() {
+  compare $OLD $NEW png:- \
+    | convert $OLD - $NEW -append png:- > $OUT
+}
+
+# Blink comparison.
+# https://www.imagemagick.org/Usage/compare/#flicker
+blink() {
+  OUT="$OUT.gif"
+  convert -delay 5 $OLD $NEW -loop 1000 $OUT
+}
+
+#diff_with_fuzz # BROKEN
+left_right
+#vertical
+#blink
+
+display -title "$FILE_PATH" $OUT
