@@ -1,0 +1,2 @@
+#! /usr/bin/env bash
+exec vim "${HOME}/logbook/$(date '+%Y-%m-%d').md"
