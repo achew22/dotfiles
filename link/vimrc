@@ -30,15 +30,19 @@ Plugin 'google/vim-glaive'
 " Install the codeformatter.
 Plugin 'google/vim-codefmt'
 " }}}
+" Install some sane defaults {{{
+Plugin 'tpope/vim-sensible'
+" }}}
 " Vim Fugitive {{{
-
 " Git plugin
 Plugin 'tpope/vim-fugitive'
 nnoremap <leader>gw :Gwrite<cr>
-
 " }}}
 " Install some sane defaults with vim-sensible {{{
 Plugin 'tpope/vim-sensible'
+" }}}
+" Abolish has lots of text manipulation helpers {{{
+Plugin 'tpope/vim-abolish'
 " }}}
 " Smart handling of paste (Auto set paste, powered by 'bracketed paste') {{{
 Plugin 'ConradIrwin/vim-bracketed-paste'
