@@ -30,9 +30,6 @@ Plugin 'google/vim-glaive'
 " Install the codeformatter.
 Plugin 'google/vim-codefmt'
 " }}}
-" Install some sane defaults {{{
-Plugin 'tpope/vim-sensible'
-" }}}
 " Vim Fugitive {{{
 " Git plugin
 Plugin 'tpope/vim-fugitive'
