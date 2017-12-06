@@ -1,0 +1,8 @@
+# Run xmodmap to remap capslock to ctrl when X is initialized in the per user
+# context.
+
+# Full options list can be found with `man xkeyboard-config`
+setxkbmap -option caps:ctrl_modifier
+
+# This is a terminal agnostic place to set the PATH.
+export PATH="${HOME}/.bin_local:${HOME}/.bin:$PATH"
