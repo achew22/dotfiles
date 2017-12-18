@@ -30,7 +30,7 @@
 [color]
 	ui = true
 [include]
-	path = ~/.gitignore_local
+	path = ~/.gitconfig_local
 [mergetool "diffconflicts"]
 	cmd = diffconflicts vim $BASE $LOCAL $REMOTE $MERGED
 	trustExitCode = true
