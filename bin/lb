@@ -1,7 +1,7 @@
 #! /usr/bin/env bash
 [ ! -d "${HOME}/logbook" ]; mkdir "${HOME}/logbook"
 if [ ! -f "${HOME}/logbook/$(date '+%Y-%m-%d').md" ]; then
-  echo "# Andrew Allen - $(date '+%Y-%m-%d')\n\n" > \
+  printf "# Andrew Allen - $(date '+%Y-%m-%d')\n\n" > \
       "${HOME}/logbook/$(date '+%Y-%m-%d').md"
 fi
 exec vim "${HOME}/logbook/$(date '+%Y-%m-%d').md"
