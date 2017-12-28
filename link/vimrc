@@ -1,6 +1,12 @@
 " Store as ~/.emacs
 " Andrew Z Allen
 
+try
+  source ~/.vimrc_preamble
+catch
+  " No file, no problem.
+endtry
+
 set nocompatible
 
 " Vim Helpers {{{
@@ -24,11 +30,15 @@ Plugin 'google/vim-maktaba'
 
 " Also add Glaive, which is used to configure codefmt's maktaba flags. See
 " `:help :Glaive` for usage.
-Plugin 'google/vim-glaive'
+if !local_glaive
+  Plugin 'google/vim-glaive'
+endif
 " }}}
 " Google CodeFmt {{{
 " Install the codeformatter.
-Plugin 'google/vim-codefmt'
+if !local_codefmt
+  Plugin 'google/vim-codefmt'
+endif
 " }}}
 " Vim Fugitive {{{
 " Git plugin
