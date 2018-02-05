@@ -30,13 +30,13 @@ Plugin 'google/vim-maktaba'
 
 " Also add Glaive, which is used to configure codefmt's maktaba flags. See
 " `:help :Glaive` for usage.
-if !local_glaive
+if !exists("local_glaive")
   Plugin 'google/vim-glaive'
 endif
 " }}}
 " Google CodeFmt {{{
 " Install the codeformatter.
-if !local_codefmt
+if !exists("local_codefmt")
   Plugin 'google/vim-codefmt'
 endif
 " }}}
