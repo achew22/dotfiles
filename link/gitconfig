@@ -16,7 +16,7 @@
 	excludesfile = ~/.gitignore
 	attributesfile = ~/.gitattributes
 [merge]
-	tool = diffconflicts
+	tool = meld
 [mergetool]
 	prompt = false
 	keepBackup = false
