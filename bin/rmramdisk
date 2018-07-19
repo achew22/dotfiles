@@ -1,0 +1,29 @@
+# Remove a ramdisk
+set -e
+
+# Normally you would want this script to run in a sudo subshell, but since
+# you're going to export the bash variable "RAM_DISK".
+# NOTE: This must be kept in sync with mkramdisk
+export RAM_DISK="/usr/local/google/tmp-ramdisk"
+
+# Make a file in the ramdisk so there is something to shred in the case where
+# you emptied it manually but want to unmount anyway.
+touch "${RAM_DISK}/shred_me"
+
+# First be paranoid and grant write to yourself.
+find "${RAM_DISK}" -type f -print0 | xargs -0 chmod u+w
+# So that you can shred everything.
+find "${RAM_DISK}" -type f -print0 | xargs -0 shred -zu
+
+# Sometimes you get "Device or resource busy" errors. This should stop that.
+sleep 1s
+
+# Destroy the tmpfs mount
+sudo umount secrets
+
+# Remove the containing directory
+sudo rmdir "${RAM_DISK}"
+
+# Unset RAM_DISK so you don't accidentally use it.
+unset RAM_DISK
+echo "Ramdisk deleted"
