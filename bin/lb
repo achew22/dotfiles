@@ -1,7 +1,9 @@
 #! /usr/bin/env bash
 [ ! -d "${HOME}/logbook" ]; mkdir "${HOME}/logbook"
 if [ ! -f "${HOME}/logbook/$(date '+%Y-%m-%d').md" ]; then
-  printf "# Andrew Allen - $(date '+%Y-%m-%d')\n\n" > \
-      "${HOME}/logbook/$(date '+%Y-%m-%d').md"
+  cd "${HOME}/go/src"
+  logbook=$(mktemp)
+  go build -o "${logbook}" github.com/achew22/logbook/cmd/main.go
+  "${logbook}"
 fi
 exec vim "${HOME}/logbook/$(date '+%Y-%m-%d').md"
