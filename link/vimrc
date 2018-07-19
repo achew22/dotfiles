@@ -45,6 +45,12 @@ endif
 Plugin 'tpope/vim-fugitive'
 nnoremap <leader>gw :Gwrite<cr>
 " }}}
+" Vim Language Server {{{
+Plugin 'prabirshrestha/async.vim'
+Plugin 'prabirshrestha/vim-lsp'
+
+nnoremap gd :<C-u>LspDefinition<CR>
+" }}}
 " Install some sane defaults with vim-sensible {{{
 Plugin 'tpope/vim-sensible'
 " }}}
