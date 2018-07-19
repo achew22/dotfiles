@@ -1,0 +1,16 @@
+# Make a ramdisk
+set -e
+
+# Normally you would want this script to run in a sudo subshell, but since
+# you're going to export the bash variable "RAM_DISK".
+# NOTE: This must be kept in sync with mkramdisk
+export RAM_DISK="/usr/local/google/tmp-ramdisk"
+
+# Now perform the operations that require root.
+sudo mkdir -p "${RAM_DISK}"
+sudo mount -t ramfs secrets "${RAM_DISK}"
+sudo chmod 0700 "${RAM_DISK}"
+sudo chown "$(id -u -n)" "${RAM_DISK}"
+
+# Notify of the ramdisk location.
+printf "Ramdisk created and set to:\nRAM_DISK=${RAM_DISK}\n"
