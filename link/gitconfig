@@ -10,6 +10,7 @@
 	rb5 = rebase -i origin
 	lg5 = log origin..
 	amend = commit --amend --no-edit
+	aa = commit --amend --all --no-edit
 	sync = pull --rebase origin master
 	review = push origin HEAD:refs/for/master
 [core]
