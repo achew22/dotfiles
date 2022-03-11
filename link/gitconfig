@@ -36,6 +36,13 @@
 	cmd = diffconflicts vim $BASE $LOCAL $REMOTE $MERGED
 	trustExitCode = true
 [http]
-	cookiefile = /home/achew22/.gitcookies
+	cookiefile = /home/achew/.gitcookies
 [diff "image"]
-	command = ~/.bin/git-imagediff
+[credential]
+	helper = store
+[rebase]
+	autosquash = true
+[pull]
+	rebase = true
+[rerere]
+	enabled = true
