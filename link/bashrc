@@ -13,8 +13,8 @@ HISTCONTROL=ignoreboth
 shopt -s histappend
 
 # for setting history length see HISTSIZE and HISTFILESIZE in bash(1)
-HISTSIZE=1000
-HISTFILESIZE=2000
+HISTSIZE=1000000
+HISTFILESIZE=2000000
 
 # check the window size after each command and, if necessary,
 # update the values of LINES and COLUMNS.
@@ -152,11 +152,13 @@ esac
 source ~/.dotfiles/helpers/git-prompt.sh
 PS1="\[$BLUE\]\u@\h:\[$YELLOW\]\[$YELLOW\]\w\[\033[m\]\[$MAGENTA\]\$(__git_ps1)\[$COLOR_OFF\]\$ "
 
+alias vim="nvim"
+
 # Set the default text editor to vi
-export EDITOR='vim'
+export EDITOR='nvim'
 # Use bash in vi mode
 set -o vi
-set +errexit # Do not explode when there is a non-zero exit code
+set +o errexit # Do not explode when there is a non-zero exit code
 
 if [ -f ~/.bashrc_local ]; then
   . ~/.bashrc_local
