@@ -3,20 +3,19 @@
 # To install run this script #
 ##############################
 
+# Exit if there is an uncaught non-zero exit code.
 set -o errexit
-# Error traps should be inherited
+# Error traps should be inherited.
 set -o errtrace
 
-# Set up colors
 # Debug variables
 DEBUG=${DEBUG:-false}
 
-REPO="${HOME}/.dotfiles"
+is_file() {
+    local file=$1
 
-# Clone the repository into the home directory
-if [ ! -d $REPO ]; then
-  git clone https://github.com/achew22/dotfiles.git $REPO
-fi
+    [[ -f $file ]]
+}
 
 print_line() {
   local file=$1
@@ -28,7 +27,7 @@ print_line() {
 }
 
 backtrace() {
-  printf "Backtrace is:\n"
+  printf "Backtrace:\n"
 
   # caller takes an argument that is the level of the stack to pring
   frame=0
@@ -84,7 +83,6 @@ on_exit() {
     printf "${green}Finished successfully${normal}\n"
   fi
 }
-trap on_exit EXIT
 #exit 1
 #mv /does/not/exist /tmp
 
@@ -98,7 +96,7 @@ output() {
   local body="$1"
   shift
 
-  printf "${color}${title}:${normal} ${body}" "$@"
+  printf "${color}${title}:${normal} ${body}\n" "$@"
 }
 #output "title" "color" "body 1:%s 2:%s" "arg1" "arg2" "arg3"
 
@@ -107,8 +105,9 @@ info() {
   shift
 
   printf "$body" "$@"
+  printf "\n"
 }
-#info 'Test info (%s)\n' "arg1"
+#info 'Test info (%s)' "arg1"
 
 log() {
   local body="$1"
@@ -128,7 +127,7 @@ debug() {
     output "Debug" "$blue" "$body" "$@"
   fi
 }
-#debug 'test (%s, %s)\n' arg1 arg2
+#debug 'test (%s, %s)' arg1 arg2
 
 warn() {
   local body="$1"
@@ -137,7 +136,7 @@ warn() {
 
   output "Warning" "$yellow" "$body" "$@"
 }
-#warn 'test (%s, %s)\n' arg1 arg2
+#warn 'test (%s, %s)' arg1 arg2
 
 error() {
   local body="$1"
@@ -146,7 +145,7 @@ error() {
 
   output "Error" "$red" "$body" "$@"
 }
-#error 'Error (%s, %s)\n' arg1 arg2
+#error 'Error (%s, %s)' arg1 arg2
 
 success() {
   local body="$1"
@@ -155,7 +154,7 @@ success() {
 
   output "Success" "$green" $body "$@"
 }
-#success 'Success (%s, %s)\n' arg1 arg2
+#success 'Success (%s, %s)' arg1 arg2
 
 stage() {
   local title=$1
@@ -179,12 +178,12 @@ act() {
   local cmd=$1
   shift
 
-  debug "${cmd} ${@}\n"
+  debug "${cmd} ${@}"
 
   if ! $DEBUG; then
     $cmd "$@"
   else
-    warn "NOT RUNNING THE COMMAND!\n"
+    warn "NOT RUNNING THE COMMAND!"
   fi
 }
 
@@ -194,13 +193,19 @@ link() {
   local basename=$(basename $src)
   local dest="${HOME}/.${basename}"
 
-  # TODO: Figure out what to test on
-  #if [[ -e $dest || -d $dest || -s $dest ]]; then
-    info 'Backing up %s as %s\n' "$dest" "$dest.bak"
-    act mv "$dest" "$dest.bak" || true
-  #fi
+  # Skip backing up if the file is already symlinked to the right place.
+  if [[ "$(readlink "$dest")" == "$src" ]]; then
+    info "Skipping %s since it is already symlinked to %s" "$src" "$dest"
+    return
+  fi
 
-  info 'Symlinking %s to %s\n' "$src" "$dest"
+  # Only back up if the file exists.
+  is_file "$dest"  && ( \
+    info 'Backing up %s as %s' "$dest" "$dest.bak"
+    act mv "$dest" "$dest.bak" || true
+  )
+
+  info 'Symlinking %s to %s' "$src" "$dest"
   act ln -s "$src" "$dest"
 }
 #link ~/.dotfiles/link/gitignore
@@ -212,7 +217,7 @@ touch_file() {
   local basename=$(basename $src)
   local dest="${HOME}/.${basename}"
 
-  info 'Touching %s\n' "$dest"
+  info 'Touching %s' "$dest"
   act touch "$dest"
 }
 #touch_file  ~/.dotfiles/link/gitignore
@@ -224,7 +229,7 @@ parse_folder() {
   for file in "$dir"/*; do
     # TODO(achew22): Should this only parse files or are folders ok?
     if [[ -f "$file" ]]; then
-      log "$action %s\n" $file
+      log "$action %s" $file
       $action $file ~/.$basename
     fi
   done
@@ -234,9 +239,45 @@ parse_folder() {
 # Execute a script as sudo if the script ends in .$OS. or it doesn't
 # specify exclusion
 conditionally_exec() {
-  local short="$1"
-  local src="$REPO/$1"
-  shift
+  local src="$1"
+  local short="$(basename "$src")"
+
+  # Do not move this into a single check, you're depending on the else
+  # fallthrough to execute non ostype matches
+  if [[ $src == *".linux."* ]]; then
+    if [[ $OSTYPE == "linux-gnu" ]]; then
+      info "Running linux specific script: %s" $short
+      act $src "$@" || \
+        error "Failed to run %s" $short
+    fi
+  elif [[ $src == *".osx."* ]]; then
+    if [[ $OSTYPE == "darwin"* ]]; then
+      info "Running osx specific script: %s" $short
+      act $src "$@" || \
+        error "Failed to run %s" $short
+    fi
+  else
+    info "Running script: %s" $short ||
+    act $src "$@" \
+        error "Failed to run %s" $short
+  fi
+}
+
+main() {
+  trap on_exit EXIT
+
+  REPO="${HOME}/.dotfiles"
+  
+  # Clone the repository into the home directory
+  if [ ! -d $REPO ]; then
+    git init $REPO
+  fi
+  
+  git -C "$REPO" config "remote.github.url" "https://github.com/achew22/dotfiles"
+  git -C "$REPO" config "remote.github.fetch" "+refs/heads/*:refs/remotes/github/*"
+
+  git -C "$REPO" fetch github master
+  git -C "$REPO" reset --hard github/master
 
   # Install sudo if it isn't installed
   command -v sudo > /dev/null 2>&1 || {
@@ -248,75 +289,22 @@ conditionally_exec() {
   # Invalidate the user's sudo session before doing a command
   sudo -K # -K = Sure kill (the user's cookie)
 
-  # Do not move this into a single check, you're depending on the else
-  # fallthrough to execute non ostype matches
-  if [[ $src == *".linux."* ]]; then
-    if [[ $OSTYPE == "linux-gnu" ]]; then
-      info "Installing linux specific script: %s\n" $short
-      act $src "$@" || \
-        error "Failed to run %s\n" $short
-    fi
-  elif [[ $src == *".osx."* ]]; then
-    if [[ $OSTYPE == "darwin"* ]]; then
-      info "Installing osx specific script: %s\n" $short
-      act $src "$@" || \
-        error "Failed to run %s\n" $short
-    fi
-  else
-    info "Installing script: %s\n" $short ||
-    act $src "$@" \
-        error "Failed to run %s\n" $short
-  fi
+  stage "Creating linked config files" true
+  parse_folder link "${REPO}/link"
+  
+  stage "Touching local config files"
+  parse_folder touch_file "${REPO}/touch"
+  
+  stage "Running installers"
+  parse_folder conditionally_exec "${REPO}/installers"
 }
 
-install_vundle() {
-  if [[ ! -d ~/.vim/bundle/vundle ]]; then
-    info "Cloning vundle\n"
-    mkdir -p ~/.vim/bundle
+# Run main if you were run as the file directly
+if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
+  main
+fi
+# Also run main if there is no source file (curl'd into bash).
+if [[ "${BASH_SOURCE[0]}" == "" ]]; then
+  main
+fi
 
-    # Clone the vundle repo
-    git clone https://github.com/VundleVim/Vundle.vim ~/.vim/bundle/Vundle.vim
-  fi
-
-  info "Installing vundle plugins this will take a minute\n"
-
-  # Run vim in silent and install the vundle plugins eating output
-  act 'vim -e +BundleInstall +qall' || \
-    error 'Vundle install failed. Run :BundleInstall in vim to finish\n'
-
-  info "Done installing vundle!\n"
-}
-
-install_youcompleteme() {
-  if [[ ! -d ~/.vim/bundle/YouCompleteMe ]]; then
-    info "Cloning YouCompleteMe\n"
-    mkdir -p ~/.vim/bundle/YoucompleteMe
-
-    # Clone the YCM repo
-    git clone https://github.com/Valloric/YouCompleteMe.git ~/.vim/bundle/YouCompleteMe
-    pushd ~/.vim/bundle/YouCompleteMe
-    git submodule update --init --recursive
-
-    info "Installing YouCompleteMe\n"
-    ./install.sh
-    popd
-  fi
-}
-
-stage "Creating linked config files" true
-parse_folder link "${REPO}/link"
-
-stage "Touching local config files"
-parse_folder touch_file "${REPO}/touch"
-
-stage "Installing vim color scheme"
-install_vim_color_scheme
-
-stage "Install YouCompleteMe"
-install_youcompleteme
-
-stage "Installing vundle"
-install_vundle
-
-stage "Running post install scripts"
-parse_folder conditionally_exec "post_install"

@@ -1,14 +1,25 @@
-Andrew Z Allen's dotfile repo
-==
+# Andrew Z Allen's dotfile repo
 
-Before installing, first install python, curl, wget, git, cmake, build-essential
-vim and tmux. Note that vim-nox is vim + python scripting support without the
-GUI compiled in.
+## Instructions
 
-    sudo apt-get install -y python python-dev curl wget git cmake build-essential vim-nox tmux
+Before installing, first install curl and git so that we can bootstrap.
 
-To install run
+### Linux 
 
-    curl https://raw.githubusercontent.com/achew22/dotfiles/master/INSTALL | bash -x
+```sh
+sudo apt-get install -y curl git
+```
 
-That's it!
+### MacOS
+
+```sh
+xcode-select --install
+```
+
+## Installation
+
+```sh
+curl https://raw.githubusercontent.com/achew22/dotfiles/master/INSTALL | bash -x
+```
+
+Fin!
