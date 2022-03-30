@@ -7,12 +7,16 @@ Plug 'tpope/vim-fugitive', { }
 " Coc
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 
-" Colors that suck less
+" Colors that suck less. NOTE: You can't call `colorscheme` inside
+" `plug#begin`. It has to come after.
 Plug 'tomasr/molokai'
 set termguicolors
-colorscheme molokai
 
 call plug#end()
+" }}}
+
+" Configure colors {{{
+colorscheme molokai
 " }}}
 
 " Copied from coc {{{
